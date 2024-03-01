@@ -18,15 +18,17 @@ class CreateUser(graphene.Mutation):
         email = graphene.String(required=True)
         password = graphene.String(required=True)
         institution = graphene.String()
+        is_admin = graphene.Boolean() 
 
-    def mutate(self, info, username, first_name, last_name, email, password, institution=None):
+    def mutate(self, info, username, first_name, last_name, email, password, institution=None,is_admin=False):
         user = User(
             username=username,
             first_name=first_name,
             last_name=last_name,
             email=email,
             password=make_password(password),  
-            institution=institution
+            institution=institution,
+            is_admin=is_admin
         )
         user.save()
 
