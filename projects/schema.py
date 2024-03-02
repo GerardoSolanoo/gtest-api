@@ -384,3 +384,45 @@ class Query(graphene.ObjectType):
     proyectos_by_user = graphene.List(ProyectoType, id_usuario=graphene.ID())
     dimensiones_by_test = graphene.List(DimensionType, id_test=graphene.ID())
     preguntas_by_test = graphene.List(PreguntaType, id_test=graphene.ID())
+
+    def resolve_all_tests(self, info, **kwargs):
+        return Test.objects.all()
+    
+    def resolve_test_by_id(self, info, id):
+        return Test.objects.get(pk=id)
+    
+    def resolve_all_dimensions(self, info, **kwargs):
+        return Dimension.objects.all()
+    
+    def resolve_dimension_by_id(self, info, id):
+        return Dimension.objects.get(pk=id)
+    
+    def resolve_all_preguntas(self, info, **kwargs):
+        return Pregunta.objects.all()
+    
+    def resolve_pregunta_by_id(self, info, id):
+        return Pregunta.objects.get(pk=id)
+    
+    def resolve_all_proyectos(self, info, **kwargs):
+        return Proyecto.objects.all()
+    
+    def resolve_proyecto_by_id(self, info, id):
+        return Proyecto.objects.get(pk=id)
+    
+    def resolve_all_proyecto_tests(self, info, **kwargs):
+        return ProyectoTest.objects.all()
+    
+    def resolve_all_proyecto_dimensions(self, info, **kwargs):
+        return ProyectoDimension.objects.all()
+    
+    def resolve_all_proyecto_preguntas(self, info, **kwargs):
+        return ProyectoPregunta.objects.all()
+    
+    def resolve_proyectos_by_user(self, info, id_usuario):
+        return Proyecto.objects.filter(id_usuario=id_usuario)
+    
+    def resolve_dimensiones_by_test(self, info, id_test):
+        return Dimension.objects.filter(id_test=id_test)
+    
+    def resolve_preguntas_by_test(self, info, id_test):
+        return Pregunta.objects.filter(id_dimension__id_test=id_test)
