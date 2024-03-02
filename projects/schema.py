@@ -16,7 +16,7 @@ class DimensionType(DjangoObjectType):
 class PreguntaType(DjangoObjectType):
     class Meta:
         model = Pregunta
-        fields = ('id', 'id_test', 'pregunta', 'tipo_pregunta', 'valor_minimo', 'valor_maximo')
+        fields = ('id', 'id_dimension', 'pregunta', 'tipo_pregunta', 'valor_minimo', 'valor_maximo')
 
 class ProyectoType(DjangoObjectType):
     class Meta:
@@ -153,15 +153,15 @@ class CreatePregunta(graphene.Mutation):
     pregunta = graphene.Field(PreguntaType)
 
     class Arguments:
-        id_test = graphene.ID(required=True)
+        id_dimension = graphene.ID(required=True)
         pregunta = graphene.String(required=True)
         tipo_pregunta = graphene.String(required=True)
         valor_minimo = graphene.Int(required=True)
         valor_maximo = graphene.Int(required=True)
 
-    def mutate(self, info, id_test, pregunta, tipo_pregunta, valor_minimo, valor_maximo):
+    def mutate(self, info, id_dimension, pregunta, tipo_pregunta, valor_minimo, valor_maximo):
         pregunta = Pregunta(
-            id_test=Test.objects.get(pk=id_test),
+            id_dimension=Dimension.objects.get(pk=id_dimension),
             pregunta=pregunta,
             tipo_pregunta=tipo_pregunta,
             valor_minimo=valor_minimo,
@@ -188,17 +188,17 @@ class UpdatePregunta(graphene.Mutation):
 
     class Arguments:
         id = graphene.ID(required=True)
-        id_test = graphene.ID()
+        id_dimension = graphene.ID()
         pregunta = graphene.String()
         tipo_pregunta = graphene.String()
         valor_minimo = graphene.Int()
         valor_maximo = graphene.Int()
 
-    def mutate(self, info, id, id_test=None, pregunta=None, tipo_pregunta=None, valor_minimo=None, valor_maximo=None):
+    def mutate(self, info, id, id_dimension=None, pregunta=None, tipo_pregunta=None, valor_minimo=None, valor_maximo=None):
         pregunta = Pregunta.objects.get(pk=id)
 
-        if id_test is not None:
-            pregunta.id_test = Test.objects.get(pk=id_test)
+        if id_dimension is not None:
+            pregunta.id_dimension = Dimension.objects.get(pk=id_test)
         if pregunta is not None:
             pregunta.pregunta = pregunta
         if tipo_pregunta is not None:
