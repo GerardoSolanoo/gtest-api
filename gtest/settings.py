@@ -39,9 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'users',
+    'projects',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,7 +85,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'password',
         'HOST': 'localhost', 
-        'PORT': '5432',  
+        'PORT': '5433',  
     }
 }
 
