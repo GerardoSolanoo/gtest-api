@@ -18,7 +18,7 @@ class Dimension(models.Model):
     fecha_actualizacion = models.DateTimeField(auto_now=True)
 
 class Pregunta(models.Model):
-    id_test = models.ForeignKey(Test, on_delete=models.CASCADE)
+    id_dimension = models.ForeignKey(Dimension, on_delete=models.CASCADE)
     pregunta = models.TextField(null=False)
     tipo_pregunta = models.CharField(max_length=255, null=False)
     valor_minimo = models.IntegerField(null=False)
