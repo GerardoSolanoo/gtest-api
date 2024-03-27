@@ -58,23 +58,11 @@ class CreateTest(graphene.Mutation):
 
         return CreateTest(test=test)
     
-class DeleteTest(graphene.Mutation):
-    success = graphene.Boolean()
-
-    class Arguments:
-        id = graphene.ID(required=True)
-
-    def mutate(self, info, id):
-        test = Test.objects.get(pk=id)
-        test.delete()
-
-        return DeleteTest(success=True)
-    
 class UpdateTest(graphene.Mutation):
     test = graphene.Field(TestType)
 
     class Arguments:
-        id = graphene.ID(required=True)
+        id = graphene.String(required=True)
         nombre = graphene.String()
         descripcion = graphene.String()
         autor = graphene.String()
@@ -95,12 +83,25 @@ class UpdateTest(graphene.Mutation):
         test.save()
 
         return UpdateTest(test=test)
+
+class DeleteTest(graphene.Mutation):
+    success = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.String(required=True)
+
+    def mutate(self, info, id):
+        test = Test.objects.get(pk=id)
+        test.delete()
+
+        return DeleteTest(success=True)
+
     
 class CreateDimension(graphene.Mutation):
     dimension = graphene.Field(DimensionType)
 
     class Arguments:
-        id_test = graphene.ID(required=True)
+        id_test = graphene.String(required=True)
         nombre = graphene.String(required=True)
         descripcion = graphene.String()
 
@@ -114,24 +115,12 @@ class CreateDimension(graphene.Mutation):
 
         return CreateDimension(dimension=dimension)
     
-class DeleteDimension(graphene.Mutation):
-    success = graphene.Boolean()
-
-    class Arguments:
-        id = graphene.ID(required=True)
-
-    def mutate(self, info, id):
-        dimension = Dimension.objects.get(pk=id)
-        dimension.delete()
-
-        return DeleteDimension(success=True)
-
 class UpdateDimension(graphene.Mutation):
     dimension = graphene.Field(DimensionType)
 
     class Arguments:
-        id = graphene.ID(required=True)
-        id_test = graphene.ID()
+        id = graphene.String(required=True)
+        id_test = graphene.String()
         nombre = graphene.String()
         descripcion = graphene.String()
 
@@ -149,11 +138,23 @@ class UpdateDimension(graphene.Mutation):
 
         return UpdateDimension(dimension=dimension)
 
+class DeleteDimension(graphene.Mutation):
+    success = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.String(required=True)
+
+    def mutate(self, info, id):
+        dimension = Dimension.objects.get(pk=id)
+        dimension.delete()
+
+        return DeleteDimension(success=True)
+
 class CreatePregunta(graphene.Mutation):
     pregunta = graphene.Field(PreguntaType)
 
     class Arguments:
-        id_dimension = graphene.ID(required=True)
+        id_dimension = graphene.String(required=True)
         pregunta = graphene.String(required=True)
         tipo_pregunta = graphene.String(required=True)
         valor_minimo = graphene.Int(required=True)
@@ -171,46 +172,47 @@ class CreatePregunta(graphene.Mutation):
 
         return CreatePregunta(pregunta=pregunta)
     
-class DeletePregunta(graphene.Mutation):
-    success = graphene.Boolean()
-
-    class Arguments:
-        id = graphene.ID(required=True)
-
-    def mutate(self, info, id):
-        pregunta = Pregunta.objects.get(pk=id)
-        pregunta.delete()
-
-        return DeletePregunta(success=True)
-
 class UpdatePregunta(graphene.Mutation):
     pregunta = graphene.Field(PreguntaType)
 
     class Arguments:
-        id = graphene.ID(required=True)
-        id_dimension = graphene.ID()
+        id = graphene.String(required=True)
+        id_dimension = graphene.String()
         pregunta = graphene.String()
         tipo_pregunta = graphene.String()
         valor_minimo = graphene.Int()
         valor_maximo = graphene.Int()
 
     def mutate(self, info, id, id_dimension=None, pregunta=None, tipo_pregunta=None, valor_minimo=None, valor_maximo=None):
-        pregunta = Pregunta.objects.get(pk=id)
+        pregunta_instance = Pregunta.objects.get(pk=id)
 
         if id_dimension is not None:
-            pregunta.id_dimension = Dimension.objects.get(pk=id_test)
+            pregunta_instance.id_dimension = Dimension.objects.get(pk=id_dimension)
         if pregunta is not None:
-            pregunta.pregunta = pregunta
+            pregunta_instance.pregunta = pregunta
         if tipo_pregunta is not None:
-            pregunta.tipo_pregunta = tipo_pregunta
+            pregunta_instance.tipo_pregunta = tipo_pregunta
         if valor_minimo is not None:
-            pregunta.valor_minimo = valor_minimo
+            pregunta_instance.valor_minimo = valor_minimo
         if valor_maximo is not None:
-            pregunta.valor_maximo = valor_maximo
+            pregunta_instance.valor_maximo = valor_maximo
 
-        pregunta.save()
+        pregunta_instance.save()
 
-        return UpdatePregunta(pregunta=pregunta)
+        return UpdatePregunta(pregunta=pregunta_instance)
+
+class DeletePregunta(graphene.Mutation):
+    success = graphene.Boolean()
+
+    class Arguments:
+        id = graphene.String(required=True)
+
+    def mutate(self, info, id):
+        pregunta_instance = Pregunta.objects.get(pk=id)
+        pregunta_instance.delete()
+
+        return DeletePregunta(success=True)
+
 
 class CreateProyecto(graphene.Mutation):
     proyecto = graphene.Field(ProyectoType)
