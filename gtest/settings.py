@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2cy*=xe%^j7m=vkd!92pnta*fjczc=jz_g2di#y%9j!(xcgns1'
+SECRET_KEY = config("PROD_SECRET_KEY", default='')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=True, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -80,15 +81,17 @@ WSGI_APPLICATION = 'gtest.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gtest',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
-        'HOST': 'localhost', 
-        'PORT': '5433',  
-    }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config("PROD_DATABASE", default=''),
+        'USER': config("PROD_USER", default=''),
+        'PASSWORD': config("PROD_PASSWORD", default=''),
+        'HOST': config("PROD_HOST", default=''),
+        'PORT': config("PROD_PORT", default=''),
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
+    },
 }
-
 
 
 # Password validation
